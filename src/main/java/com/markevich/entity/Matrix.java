@@ -2,12 +2,9 @@ package com.markevich.entity;
 
 import com.markevich.exception.MatrixIndexOutBoundException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class  Matrix {
-    private static final int DEFAULT_SIZE = 0;
+public class Matrix {
 
     private Element[][] matrix;
     private int size;
@@ -31,6 +28,20 @@ public class  Matrix {
 
     public static Matrix getInstance() {
         return Singleton.INSTANCE;
+    }
+
+    public boolean resizeMatrix(int newSize) {
+        if (size != 0 || newSize <= 0) {
+            return false;
+        }
+        size = newSize;
+        matrix = new Element[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                matrix[i][j] = new Element();
+            }
+        }
+        return true;
     }
 
     public int getSize() {
