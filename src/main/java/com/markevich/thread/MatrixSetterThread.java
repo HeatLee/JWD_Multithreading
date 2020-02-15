@@ -2,20 +2,22 @@ package com.markevich.thread;
 
 import com.markevich.entity.Matrix;
 import com.markevich.exception.MatrixIndexOutBoundException;
+import org.apache.log4j.Logger;
 
 import java.util.Random;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.CountDownLatch;
 
 public class MatrixSetterThread extends Thread {
+    private static final Logger LOGGER = Logger.getLogger(MatrixSetterThread.class);
+
     private final int nameValue;
-    private CyclicBarrier barrierBeforeSumCalculation;
+    private CountDownLatch barrierBeforeSumCalculating;
     private Matrix matrix;
 
-    public MatrixSetterThread(int name, CyclicBarrier barrier) {
+    public MatrixSetterThread(int name, CountDownLatch calculatingBarrier) {
         super(String.valueOf(name));
         nameValue = name;
-        barrierBeforeSumCalculation = barrier;
+        barrierBeforeSumCalculating = calculatingBarrier;
         matrix = Matrix.getInstance();
     }
 
@@ -28,13 +30,9 @@ public class MatrixSetterThread extends Thread {
             } else {
                 setElementOnRandomPlaceInRow(indexOnDiagonal);
             }
-            barrierBeforeSumCalculation.await();
+            barrierBeforeSumCalculating.countDown();
         } catch (MatrixIndexOutBoundException e) {
-            //todo log
-        } catch (InterruptedException ex) {
-            //todo log
-        } catch (BrokenBarrierException exc) {
-            //todo log
+            LOGGER.warn(e);
         }
     }
 
