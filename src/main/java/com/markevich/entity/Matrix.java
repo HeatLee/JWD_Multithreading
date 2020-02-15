@@ -2,6 +2,7 @@ package com.markevich.entity;
 
 import com.markevich.exception.MatrixIndexOutBoundException;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Matrix {
@@ -18,11 +19,13 @@ public class Matrix {
 
     private static class Element{
         private int value;
-        private ReentrantLock lock;
+        private Lock lock;
+        private boolean isLocked;
 
         private Element() {
             value = 0;
             lock = new ReentrantLock();
+            isLocked = false;
         }
     }
 
@@ -53,10 +56,12 @@ public class Matrix {
             throw new MatrixIndexOutBoundException("Invalid index while setting element value");
         }
         Element updatedElement = matrix[row][column];
-        if (updatedElement.lock.tryLock()) {
-            updatedElement.value = value;
-            return true;
-        }
+            if (!updatedElement.isLocked && updatedElement.lock.tryLock()) {
+                updatedElement.value = value;
+                updatedElement.isLocked = true;
+                updatedElement.lock.unlock();
+                return true;
+            }
         return false;
     }
 
@@ -69,11 +74,7 @@ public class Matrix {
 
     public void unlockAll() {
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (matrix[i][j].lock.isLocked()) {
-                    matrix[i][j].lock.unlock();
-                }
-            }
+            matrix[i][i].isLocked = false;
         }
     }
 
