@@ -174,6 +174,7 @@ modules.xml
 .mtj.tmp/
 
 # Package Files #
+/target
 *.jar
 *.war
 *.nar
