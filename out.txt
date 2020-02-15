@@ -1,0 +1,22 @@
+
+   1   1   8   0   0
+   0   9   9   3   0
+   0   0   8   0   0
+   0   0   0   3   0
+   0   0   0   0   0
+Thread № 1 has sum = 11;
+Thread № 9 has sum = 31;
+Thread № 8 has sum = 33;
+Thread № 3 has sum = 9;
+Thread № 0 has sum = 0;
+
+   6   1   8   0   0
+   0   6   9   3   0
+   3   6   3   0   0
+   6   0   0   3   3
+   0   9   0   0   9
+Thread № 1 has sum = 11;
+Thread № 9 has sum = 31;
+Thread № 8 has sum = 33;
+Thread № 3 has sum = 15;
+Thread № 0 has sum = 0;
